@@ -1,0 +1,72 @@
+<div class="container">
+    <div class="row my-5">
+        <h1 class="col-12 text-center">
+            Edit cars
+        </h1>
+    </div>
+    {{#if err}}
+        <div class="row">
+            <div class="alert alert-danger col-12" role="alert">{{err.text}}</div>
+        </div>
+    {{/if}}
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    {{#each columns}}
+                        <th scope="col">{{this}}</th>
+                    {{/each}}
+                </tr>
+            </thead>
+            <tbody>
+                {{#each docs}}
+                    <tr>
+                        
+                        {{#compareString _id  @root.editedID}}
+                        
+                        <form action="/edit" method="POST" >
+                            {{#each this}}
+                                {{#compareString @key "_id"}}
+                                    <td>{{this}}</td>
+                                {{else}}
+                                <td>
+                                    <select name="{{@key}}" id="">
+                                        <option value="TAK">TAK</option>
+                                        <option value="NIE">NIE</option>
+                                        <option value="BRAK">BRAK DANYCH</option>
+                                    </select>
+                                </td>
+                                {{/compareString}}
+                            {{/each}}
+                            <td>
+                                <input type="hidden" name="_id" value="{{_id}}">
+                                <input type="submit" value="Confirm" class="btn btn-success" onclick="return submitClick()" >
+                                <a class="btn btn-warning" href="/edit">Cancel</a>
+                            </td>
+                        </form>
+                        {{else}}
+                            {{#each this}}
+                                <td>{{this}}</td>
+                            {{/each}}
+                            <td>
+                                <form action="/edit" method="GET">
+                                    <input type="hidden" name="id" value="{{_id}}">
+                                    <input type="submit" value="EDIT" class="btn btn-primary" >
+                                </form>
+                            </td>
+                        {{/compareString}}
+                        
+                    </tr>
+                {{/each}}
+                
+            </tbody>
+            
+        </table>
+    </div>
+</div>
+
+<script>
+    function submitClick(){
+        return confirm('Do you want to edit?')
+    }
+</script>

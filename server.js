@@ -21,6 +21,8 @@ const coll1 = new Datastore({
 });
 
 
+
+
 const columns = ["ubezpieczony", "benzyna", "uszkodzony", "naped4x4"]
 
 app.get("/", function (req, res) {
@@ -107,7 +109,63 @@ app.post("/list", function (req, res) {
 
 
 app.get("/edit", function (req, res) {
-    res.render('home.hbs');
+    const context = {
+        columns: [...columns, "_id", ""],
+        helpers: {
+            compareString: function(p, q, options) {
+                return (p == q) ? options.fn(this) : options.inverse(this);
+            }
+        }
+    }
+    coll1.find({ }, function (err, docs) {
+        if (err) {
+            res.render('edit.hbs', {err: {text: "Coś poszło nie tak"}});
+            return;
+        }
+        console.log("Pobrano dane");
+        context.editedID = req.query.id
+        context.docs = docs
+        res.render('edit.hbs', context);
+
+    });
+})
+
+app.post("/edit", function (req, res) {
+    const context = {
+        columns: [...columns, "_id", ""],
+        helpers: {
+            compareString: function(p, q, options) {
+                return (p == q) ? options.fn(this) : options.inverse(this);
+            }
+        }
+    }
+
+
+    const newData = {}
+
+    columns.forEach((e) => {
+        newData[e] = req.body[e]
+    })
+
+    coll1.update(
+        { _id: req.body._id }, 
+        { $set: newData },
+        {},
+        function (err, numReplaced) {
+          console.log(`Updeted ${numReplaced} record(s)` );
+        }
+    );
+    coll1.find({ }, function (err, docs) {
+        if (err) {
+            res.render('edit.hbs', {err: {text: "Coś poszło nie tak"}});
+            return;
+        }
+        console.log("Pobrano dane");
+        context.editedID = req.query.id
+        context.docs = docs
+        res.render('edit.hbs', context);
+
+    });
 })
 
 app.listen(PORT, function () {
