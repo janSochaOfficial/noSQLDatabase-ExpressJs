@@ -1,0 +1,46 @@
+<div class="container">
+    <div class="row my-5">
+        <h1 class="col-12 text-center">
+            All cars
+        </h1>
+    </div>
+    {{#if err}}
+        <div class="row">
+            <div class="alert alert-danger col-12" role="alert">{{err.text}}</div>
+        </div>
+    {{/if}}
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    {{#each columns}}
+                        <th scope="col">{{this}}</th>
+                    {{/each}}
+                </tr>
+            </thead>
+            <tbody>
+                {{#each docs}}
+                    <tr>
+                        {{#each this}}
+                            <td>{{this}}</th>
+                        {{/each}}
+                        <td>
+                            <form action="/list" method="POST" onsubmit="return submitClick()">
+                                <input type="hidden" name="id" value="{{_id}}">
+                                <input type="submit" value="DELETE" class="btn btn-danger" >
+                            </form>
+                        </td>
+                    </tr>
+                {{/each}}
+                
+            </tbody>
+            
+        </table>
+    </div>
+</div>
+
+<script>
+    function submitClick(){
+        return confirm('Do you want to delete?')
+    }
+</script>

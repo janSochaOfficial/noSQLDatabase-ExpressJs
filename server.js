@@ -20,7 +20,6 @@ const coll1 = new Datastore({
     autoload: true
 });
 
-const context = {}
 
 const columns = ["ubezpieczony", "benzyna", "uszkodzony", "naped4x4"]
 
@@ -30,9 +29,6 @@ app.get("/", function (req, res) {
 
 
 app.get("/add", function (req, res) {
-    
-
-
     res.render('add.hbs');
 })
 
@@ -69,12 +65,49 @@ app.post("/add", function (req, res) {
 
 
 app.get("/list", function (req, res) {
-    res.render('home.hbs', context);
+    const context = {
+        columns: [...columns, "_id", ""]
+
+    }
+    coll1.find({ }, function (err, docs) {
+        if (err) {
+            res.render('list.hbs', {err: {text: "Coś poszło nie tak"}});
+            return;
+        }
+        console.log("Pobrano dane");
+        context.docs = docs
+        res.render('list.hbs', context);
+
+    });
+})
+
+app.post("/list", function (req, res) {
+    const context = {
+        columns: [...columns, "_id", ""],
+    
+    }
+
+    
+    coll1.remove({ _id:req.body.id }, {}, function (err, numRemoved) {
+        console.log("Deleted " + req.body.id)
+    });
+
+    coll1.find({ }, function (err, docs) {
+        if (err) {
+            res.render('list.hbs', {err: {text: "Coś poszło nie tak"}});
+            return;
+        }
+        console.log("Data downloaded");
+        context.docs = docs
+        res.render('list.hbs', context);
+
+    });
 })
 
 
+
 app.get("/edit", function (req, res) {
-    res.render('home.hbs', context);
+    res.render('home.hbs');
 })
 
 app.listen(PORT, function () {
