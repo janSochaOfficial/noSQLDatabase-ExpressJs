@@ -1,0 +1,44 @@
+<div class="container">
+    <div class="row my-5">
+        <h1 class="col-12 text-center">
+            add car page
+        </h1>
+    </div>
+    {{#if succes}}
+        <div class="row">
+            <span class="alert alert-success col-12" role="alert">
+                {{succes.text}} <a href="/list"></a>
+            </span>
+        </div>
+    {{/if}}
+    {{#if error}}
+        <div class="row">
+            <span class="alert alert-danger col-12" role="alert">
+                {{error.text}}
+            </span>
+        </div>
+    {{/if}}
+
+    <div class="row">
+        <form action="/add" class="col-12" method="POST">
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="ubezpieczony" value="ubezpieczony" name="ubezpieczony">
+                <label class="form-check-label" for="ubezpieczony">Ubezpieczony</label>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1" value="benzyna" name="benzyna">
+                <label class="form-check-label" for="benzyna">Benzyna</label>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="uszkodzony" value="uszkodzony" name="uszkodzony">
+                <label class="form-check-label" for="uszkodzony">Uszkodzony</label>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="naped4x4" value="naped4x4" name="naped4x4">
+                <label class="form-check-label" for="naped4x4">Napęd 4x4</label>
+            </div>
+            <button type="submit" class="btn btn-dark">Dodaj</button>
+
+        </form>
+    </div>
+</div>
